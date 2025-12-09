@@ -1,5 +1,6 @@
 ﻿using EmployeeManagementSystem.Interfaces;
 using EmployeeManagementSystem.Repositories;
+using EmployeeManagementSystem.Services;
 using EmployeeManagementSystem.UI;
 
 namespace EmployeeManagementSystem;

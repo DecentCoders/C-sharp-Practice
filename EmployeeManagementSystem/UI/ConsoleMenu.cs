@@ -203,7 +203,7 @@ public class ConsoleMenu
         // Hire Date (LightGray prompt + 2020 rule + clean error)
         Console.ForegroundColor = ConsoleColor.Gray;
         var hireDate = GetValidDate(
-            prompt: "Hire Date (MM/dd/yyyy) - No dates before 2020: ",
+            prompt: "Hire Date (MM/dd/yyyy) : ",
             error: "Invalid date format. Use MM/dd/yyyy (e.g., 10/20/2020)."
         );
         Console.ResetColor();
