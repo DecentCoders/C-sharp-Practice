@@ -1,0 +1,76 @@
+using EmployeeManagementSystem.Interfaces;
+using EmployeeManagementSystem.Models;
+using EmployeeManagementSystem.Models.Enums;
+
+namespace EmployeeManagementSystem.Repositories;
+
+public class InMemoryEmployeeRepository : IEmployeeRepository
+{
+    private readonly List<Employee> _employees = new();
+    private int _nextId = 1;
+
+    // Constructor: Adds the default employee automatically
+    public InMemoryEmployeeRepository()
+    {
+        // Add Default Employee: Hridoy Hawladar
+        var defaultEmployee = new Employee(
+            id: _nextId++, // ID: 1 (then _nextId becomes 2 for new employees)
+            firstName: "Hridoy",
+            lastName: "Hawladar",
+            department: Department.Engineering, // Matches "Engineering" dept
+            salary: 20000.00m, // $20,000.00 annual salary
+            hireDate: new DateTime(2020, 10, 20), // 10/20/2020
+            initialVacationDays: 15 // 15 available vacation days (0 used)
+        );
+
+        _employees.Add(defaultEmployee);
+    }
+
+    public int GetNextAvailableId() => _nextId++;
+
+    public IEnumerable<Employee> GetAllEmployees() => _employees.OrderBy(e => e.Id).ToList();
+
+    public Employee? GetEmployeeById(int id) => _employees.FirstOrDefault(e => e.Id == id);
+
+    public IEnumerable<Employee> SearchEmployeesByName(string searchTerm)
+    {
+        if (string.IsNullOrWhiteSpace(searchTerm)) return Enumerable.Empty<Employee>();
+        var lowerTerm = searchTerm.Trim().ToLower();
+        return _employees
+            .Where(e => e.FirstName.ToLower().Contains(lowerTerm) || e.LastName.ToLower().Contains(lowerTerm))
+            .OrderBy(e => e.Id)
+            .ToList();
+    }
+
+    public void AddEmployee(Employee employee)
+    {
+        if (employee == null) throw new ArgumentNullException(nameof(employee));
+        if (EmployeeExists(employee.Id)) throw new InvalidOperationException($"ID {employee.Id} already exists.");
+        _employees.Add(employee);
+    }
+
+    public bool UpdateEmployee(Employee employee)
+    {
+        if (employee == null) throw new ArgumentNullException(nameof(employee));
+        var existing = GetEmployeeById(employee.Id);
+        if (existing == null) return false;
+
+        // Update with validation (uses Employee's property setters)
+        existing.FirstName = employee.FirstName;
+        existing.LastName = employee.LastName;
+        existing.Department = employee.Department;
+        existing.Salary = employee.Salary;
+        existing.HireDate = employee.HireDate;
+        return true;
+    }
+
+    public bool DeleteEmployee(int id)
+    {
+        var employee = GetEmployeeById(id);
+        if (employee == null) return false;
+        _employees.Remove(employee);
+        return true;
+    }
+
+    public bool EmployeeExists(int id) => _employees.Any(e => e.Id == id);
+}
