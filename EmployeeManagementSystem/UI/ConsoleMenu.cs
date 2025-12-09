@@ -50,52 +50,202 @@ public class ConsoleMenu
         }
     }
 
-    private void DisplayMainMenu()
-    {
-        Console.WriteLine("==================== EMPLOYEE MANAGEMENT SYSTEM ====================");
-        Console.WriteLine("1. Add New Employee");
-        Console.WriteLine("2. Update Employee");
-        Console.WriteLine("3. Delete Employee");
-        Console.WriteLine("4. Search Employee (ID/Name)");
-        Console.WriteLine("5. Show All Employees");
-        Console.WriteLine("6. Payroll Menu");
-        Console.WriteLine("7. Vacation Menu");
-        Console.WriteLine("8. Exit");
-        Console.WriteLine("====================================================================");
-        Console.Write("Enter your choice: ");
-    }
+ private void DisplayMainMenu()
+{
+    // Title (Magenta)
+    Console.ForegroundColor = ConsoleColor.Magenta;
+    Console.WriteLine("==================== EMPLOYEE MANAGEMENT SYSTEM ====================");
+    Console.ResetColor();
+
+    // Menu options (Numbers = DarkYellow, Text = Cyan)
+    Console.ForegroundColor = ConsoleColor.DarkYellow;
+    Console.Write("1. ");
+    Console.ForegroundColor = ConsoleColor.Cyan;
+    Console.WriteLine("Add New Employee");
+    
+    Console.ForegroundColor = ConsoleColor.DarkYellow;
+    Console.Write("2. ");
+    Console.ForegroundColor = ConsoleColor.Cyan;
+    Console.WriteLine("Update Employee");
+    
+    Console.ForegroundColor = ConsoleColor.DarkYellow;
+    Console.Write("3. ");
+    Console.ForegroundColor = ConsoleColor.Cyan;
+    Console.WriteLine("Delete Employee");
+    
+    Console.ForegroundColor = ConsoleColor.DarkYellow;
+    Console.Write("4. ");
+    Console.ForegroundColor = ConsoleColor.Cyan;
+    Console.WriteLine("Search Employee (ID/Name)");
+    
+    Console.ForegroundColor = ConsoleColor.DarkYellow;
+    Console.Write("5. ");
+    Console.ForegroundColor = ConsoleColor.Cyan;
+    Console.WriteLine("Show All Employees");
+    
+    Console.ForegroundColor = ConsoleColor.DarkYellow;
+    Console.Write("6. ");
+    Console.ForegroundColor = ConsoleColor.Cyan;
+    Console.WriteLine("Payroll Menu");
+    
+    Console.ForegroundColor = ConsoleColor.DarkYellow;
+    Console.Write("7. ");
+    Console.ForegroundColor = ConsoleColor.Cyan;
+    Console.WriteLine("Vacation Menu");
+    
+    Console.ForegroundColor = ConsoleColor.DarkYellow;
+    Console.Write("8. ");
+    Console.ForegroundColor = ConsoleColor.Cyan;
+    Console.WriteLine("Exit");
+
+    // Footer (Magenta)
+    Console.ForegroundColor = ConsoleColor.Magenta;
+    Console.WriteLine("====================================================================");
+    Console.ResetColor();
+
+    // Prompt (White with Blue highlight)
+    Console.ForegroundColor = ConsoleColor.Blue;
+    Console.Write("Enter your choice: ");
+    Console.ResetColor();
+}
 
     #region Employee Core Operations
-    private void AddEmployee()
+ private void AddEmployee()
+{
+    // Colorful title (Magenta) - Fixed: Added line break for spacing
+    Console.ForegroundColor = ConsoleColor.Magenta;
+    Console.WriteLine("\n=== ADD NEW EMPLOYEE ===");
+    Console.ResetColor();
+
+    try
     {
-        Console.WriteLine("\n=== ADD NEW EMPLOYEE ===");
-        try
-        {
-            var id = _repo.GetNextAvailableId();
-            var firstName = GetValidString("First Name (2-50 chars): ", s => s.Length is >=2 and <=50);
-            var lastName = GetValidString("Last Name (2-50 chars): ", s => s.Length is >=2 and <=50);
-            var dept = GetValidDepartment();
-            // In the AddEmployee() method, replace the OLD salary line with this NEW one:
-var salary = GetValidDecimal(
-    prompt: "Annual Salary ($10,000 - $1,000,000): ", // No $ in prompt (avoids confusion)
-    validator: d => d is >= 10000 and <= 1000000,
-    error: "❌ Salary must be a number between 10000 and 1000000 (e.g., 80000)",
-    isCurrency: true // Enables $ stripping if user accidentally enters it
-);
-            var hireDate = GetValidDate("Hire Date (MM/dd/yyyy): ");
-            var vacationDays = GetValidInt("Initial Vacation Days (0-365): ", i => i is >=0 and <=365);
+        var id = _repo.GetNextAvailableId();
 
-            var employee = new Employee(id, firstName, lastName, dept, salary, hireDate, vacationDays);
-            _repo.AddEmployee(employee);
-            ShowSuccess($"Employee added! ID: {id} | Name: {employee.GetFullName()}");
-        }
-        catch (Exception ex)
+        // First Name (LightGray prompt + fixed validation for empty/only spaces)
+        Console.ForegroundColor = ConsoleColor.Gray;
+        var firstName = GetValidString(
+            prompt: "First Name (2-50 chars): ", 
+            validator: s => s.Length is >= 2 and <= 50
+        );
+        Console.ResetColor(); // Ensure color reset immediately after input
+
+        // Last Name (LightGray prompt + same validation fix)
+        Console.ForegroundColor = ConsoleColor.Gray;
+        var lastName = GetValidString(
+            prompt: "Last Name (2-50 chars): ", 
+            validator: s => s.Length is >= 2 and <= 50
+        );
+        Console.ResetColor();
+
+        // === Colorful Number-Based Department Selection (0 to Exit) ===
+        Console.WriteLine("\nAvailable Departments:");
+        var departmentOptions = Enum.GetValues<Department>().ToList();
+        
+        // Fixed: Ensure loop uses valid enum values (no nulls)
+        for (int i = 0; i < departmentOptions.Count; i++)
         {
-            ShowError($"Add failed: {ex.Message}");
+            Console.ForegroundColor = ConsoleColor.Yellow; // Number color
+            Console.Write($"{i + 1}. ");
+            Console.ForegroundColor = ConsoleColor.Green; // Department name color
+            Console.WriteLine(departmentOptions[i]);
+            Console.ResetColor(); // Reset after each line to avoid leaks
         }
+
+        // Exit option (Red number + White text) - Fixed: Better spacing
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.Write("0. ");
+        Console.ForegroundColor = ConsoleColor.White;
+        Console.WriteLine("Exit (cancel adding employee)");
+        Console.ResetColor();
+
+        int selectedDeptNumber;
+        while (true)
+        {
+            // Colored prompt (Blue) - Fixed: No extra spaces
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.Write("Enter the number for your choice: ");
+            Console.ResetColor();
+
+            // Fixed: Handle null input safely (trim + null coalescing)
+            var input = Console.ReadLine()?.Trim() ?? string.Empty;
+            if (int.TryParse(input, out selectedDeptNumber))
+            {
+                // Option 0: Cancel and exit
+                if (selectedDeptNumber == 0)
+                {
+                    ShowInfo("Exiting employee addition. No employee was added.");
+                    return; // Stop the add process (safe exit)
+                }
+
+                // Valid number (1 to total departments)
+                if (selectedDeptNumber >= 1 && selectedDeptNumber <= departmentOptions.Count)
+                {
+                    break; // Exit loop - valid selection
+                }
+            }
+
+            // Fixed: Clear error message (no duplicate ❌)
+            ShowError($"Invalid input. Enter a number between 0 and {departmentOptions.Count}");
+        }
+
+        // Map number to department (fixed: index safety)
+        var dept = departmentOptions[selectedDeptNumber - 1];
+
+        // Salary (LightGray prompt + fixed validation message)
+        Console.ForegroundColor = ConsoleColor.Gray;
+        var salary = GetValidDecimal(
+            prompt: "Annual Salary (10000-1000000, no $ or 'k'): ",
+            validator: d => d is >= 10000 and <= 1000000,
+            error: "Salary must be between $10,000 and $1,000,000 (enter full number, e.g., 80000)"
+        );
+        Console.ResetColor();
+
+        // Hire Date (LightGray prompt + 2020 rule + clean error)
+        Console.ForegroundColor = ConsoleColor.Gray;
+        var hireDate = GetValidDate(
+            prompt: "Hire Date (MM/dd/yyyy) - No dates before 2020: ",
+            error: "Invalid date format. Use MM/dd/yyyy (e.g., 10/20/2020)."
+        );
+        Console.ResetColor();
+
+        // Vacation Days (LightGray prompt + fixed validation)
+        Console.ForegroundColor = ConsoleColor.Gray;
+        var vacationDays = GetValidInt(
+            prompt: "Initial Vacation Days (0-365): ",
+            validator: i => i is >= 0 and <= 365
+        );
+        Console.ResetColor();
+
+        // Fixed: Ensure employee creation uses valid values
+        var employee = new Employee(
+            id: id,
+            firstName: firstName,
+            lastName: lastName,
+            department: dept,
+            salary: salary,
+            hireDate: hireDate,
+            initialVacationDays: vacationDays
+        );
+
+        _repo.AddEmployee(employee);
+        ShowSuccess($"Employee added! ID: {id} | Name: {employee.GetFullName()}");
     }
-
-    private void UpdateEmployee()
+    catch (ArgumentNullException ex)
+    {
+        // Specific error for null inputs (safe handling)
+        ShowError($"Add failed: Missing required input - {ex.Message}");
+    }
+    catch (ArgumentException ex)
+    {
+        // Specific error for invalid values (e.g., salary too low)
+        ShowError($"Add failed: Invalid input - {ex.Message}");
+    }
+    catch (Exception ex)
+    {
+        // General error (catch-all for safety)
+        ShowError($"Add failed: Unexpected error - {ex.Message}");
+    }
+}    private void UpdateEmployee()
     {
         Console.WriteLine("\n=== UPDATE EMPLOYEE ===");
         try
@@ -213,10 +363,26 @@ var salary = GetOptionalDecimal(
     #region Payroll Operations
     private void PayrollMenu()
     {
-        Console.WriteLine("\n=== PAYROLL MENU ===");
-        Console.WriteLine("1. Generate Report for Single Employee");
-        Console.WriteLine("2. Generate Report for All Employees");
-        var choice = GetValidInt("Choice (1/2): ", c => c is 1 or 2, "Enter 1 or 2.");
+      Console.ForegroundColor = ConsoleColor.Magenta;
+    Console.WriteLine("\n=== PAYROLL MENU ===");
+    Console.ResetColor();
+
+    Console.ForegroundColor = ConsoleColor.DarkYellow;
+    Console.Write("1. ");
+    Console.ForegroundColor = ConsoleColor.Cyan;
+    Console.WriteLine("Generate Report for Single Employee");
+    
+    Console.ForegroundColor = ConsoleColor.DarkYellow;
+    Console.Write("2. ");
+    Console.ForegroundColor = ConsoleColor.Cyan;
+    Console.WriteLine("Generate Report for All Employees");
+    Console.ResetColor();
+
+    Console.ForegroundColor = ConsoleColor.Blue;
+    Console.Write("Choice (1/2): ");
+    Console.ResetColor();
+
+    var choice = GetValidInt("", c => c is 1 or 2, "Enter 1 or 2.");
 
         try
         {
@@ -243,12 +409,36 @@ var salary = GetOptionalDecimal(
     #region Vacation Operations
     private void VacationMenu()
     {
-        Console.WriteLine("\n=== VACATION MENU ===");
-        Console.WriteLine("1. Add Vacation Days");
-        Console.WriteLine("2. Use Vacation Days");
-        Console.WriteLine("3. Single Employee Report");
-        Console.WriteLine("4. All Employees Report");
-        var choice = GetValidInt("Choice (1-4): ", c => c is 1 or 2 or 3 or 4, "Enter 1-4.");
+       Console.ForegroundColor = ConsoleColor.Magenta;
+    Console.WriteLine("\n=== VACATION MENU ===");
+    Console.ResetColor();
+
+    Console.ForegroundColor = ConsoleColor.DarkYellow;
+    Console.Write("1. ");
+    Console.ForegroundColor = ConsoleColor.Cyan;
+    Console.WriteLine("Add Vacation Days");
+    
+    Console.ForegroundColor = ConsoleColor.DarkYellow;
+    Console.Write("2. ");
+    Console.ForegroundColor = ConsoleColor.Cyan;
+    Console.WriteLine("Use Vacation Days");
+    
+    Console.ForegroundColor = ConsoleColor.DarkYellow;
+    Console.Write("3. ");
+    Console.ForegroundColor = ConsoleColor.Cyan;
+    Console.WriteLine("Single Employee Report");
+    
+    Console.ForegroundColor = ConsoleColor.DarkYellow;
+    Console.Write("4. ");
+    Console.ForegroundColor = ConsoleColor.Cyan;
+    Console.WriteLine("All Employees Report");
+    Console.ResetColor();
+
+    Console.ForegroundColor = ConsoleColor.Blue;
+    Console.Write("Choice (1-4): ");
+    Console.ResetColor();
+
+    var choice = GetValidInt("", c => c is 1 or 2 or 3 or 4, "Enter 1-4.");
 
         try
         {
@@ -303,22 +493,40 @@ var salary = GetOptionalDecimal(
     #endregion
 
     #region Input Helpers (No More Errors!)
-    private string GetValidString(string prompt, Func<string, bool> validator, string error = "Invalid input.")
+private string GetValidString(string prompt, Func<string, bool> validator, string error = "Invalid input.")
+{
+    while (true)
     {
-        while (true)
+        Console.Write(prompt);
+        var input = Console.ReadLine()?.Trim() ?? string.Empty;
+
+        // NEW Check 1: Block empty/only-space names
+        if (string.IsNullOrEmpty(input))
         {
-            Console.Write(prompt);
-            var input = Console.ReadLine()?.Trim() ?? string.Empty;
-            if (validator(input)) return input;
-            ShowError(error);
+            ShowError("Name cannot be empty or consist of only spaces.");
+            continue;
         }
+
+        // Existing Check 2: Block names with only numbers
+        if (input.All(char.IsDigit))
+        {
+            ShowWarning("Warning: Name cannot contain only numbers! Please include letters (e.g., Hridoy123 is allowed).");
+            continue;
+        }
+
+        // Existing Check 3: Length/other validation
+        if (validator(input))
+            return input;
+        
+        ShowError(error);
     }
+}
 
     private string GetOptionalString(string prompt, Func<string, bool> validator, string defaultValue)
     {
         Console.Write(prompt);
         var input = Console.ReadLine()?.Trim() ?? string.Empty;
-        return string.IsNullOrEmpty(input) ? defaultValue : validator(input) ? input : throw new ArgumentException("Invalid input.");
+        return string.IsNullOrEmpty(input) ? defaultValue : validator(input) ? input : throw new ArgumentException(" Invalid input.");
     }
 
     private int GetValidInt(string prompt, Func<int, bool> validator, string error = "Invalid number.")
@@ -372,44 +580,58 @@ private decimal GetOptionalDecimal(string prompt, Func<decimal, bool> validator,
     throw new ArgumentException("❌ Invalid salary. Enter a number between 10000 and 1000000.");
 }
 
-    private DateTime GetValidDate(string prompt, string error = "Use MM/dd/yyyy (e.g., 01/15/2020).")
-    {
-        while (true)
-        {
-            Console.Write(prompt);
-            if (DateTime.TryParse(Console.ReadLine()?.Trim(), out var date) && 
-                date <= DateTime.Now && date >= new DateTime(1900, 1, 1))
-                return date;
-            ShowError(error);
-        }
-    }
-
-    private DateTime GetOptionalDate(string prompt, DateTime defaultValue)
-    {
-        Console.Write(prompt);
-        var input = Console.ReadLine()?.Trim() ?? string.Empty;
-        if (string.IsNullOrEmpty(input)) return defaultValue;
-        if (DateTime.TryParse(input, out var date) && date <= DateTime.Now && date >= new DateTime(1900, 1, 1))
-            return date;
-        throw new ArgumentException("Invalid date. Use MM/dd/yyyy.");
-    }
-
- private Department GetValidDepartment()
+  private DateTime GetValidDate(string prompt, string error = "Use MM/dd/yyyy (e.g., 10/20/2020). Hire date cannot be before 2020 or in the future.")
 {
-    Console.WriteLine("\nAvailable Departments:");
-    // Rename foreach variable to "deptOption" (no conflict)
-    foreach (var deptOption in Enum.GetValues<Department>()) 
-        Console.WriteLine($"- {deptOption}");
-
+    // Company establishment year: 2020
+    var companyStartDate = new DateTime(2020, 1, 1);
+    
     while (true)
     {
-        Console.Write("Select Department: ");
-        // Use unique name "selectedDept"
-        if (Enum.TryParse<Department>(Console.ReadLine()?.Trim(), ignoreCase: true, out var selectedDept))
-            return selectedDept;
-        ShowError("Invalid department. Choose from the list.");
+        Console.Write(prompt);
+        if (DateTime.TryParse(Console.ReadLine()?.Trim(), out var date))
+        {
+            // Validate date rules
+            if (date > DateTime.Now)
+            {
+                ShowError(" Hire date cannot be in the future.");
+            }
+            else if (date < companyStartDate)
+            {
+                ShowError(" our company was established in 2020. Hire date cannot be before 2020.");
+            }
+            else
+            {
+                return date; // Valid date
+            }
+        }
+        else
+        {
+            ShowError(error); // Invalid date format
+        }
     }
 }
+
+private DateTime GetOptionalDate(string prompt, DateTime defaultValue)
+{
+    var companyStartDate = new DateTime(2020, 1, 1);
+    Console.Write(prompt);
+    var input = Console.ReadLine()?.Trim() ?? string.Empty;
+    
+    if (string.IsNullOrEmpty(input))
+        return defaultValue;
+    
+    if (DateTime.TryParse(input, out var date))
+    {
+        if (date > DateTime.Now)
+            throw new ArgumentException("Hire date cannot be in the future.");
+        if (date < companyStartDate)
+            throw new ArgumentException("our company was established in 2020. Hire date cannot be before 2020.");
+        return date;
+    }
+    
+    throw new ArgumentException("Invalid date. Use MM/dd/yyyy (e.g., 10/20/2020).");
+}
+
 
   private Department GetOptionalDepartment(Department defaultValue)
 {
@@ -432,26 +654,34 @@ private decimal GetOptionalDecimal(string prompt, Func<decimal, bool> validator,
 }
     #endregion
 
-    #region UI Helpers
-    private void ShowSuccess(string message)
-    {
-        Console.ForegroundColor = ConsoleColor.Green;
-        Console.WriteLine($"✅ {message}");
-        Console.ResetColor();
-    }
+#region UI Helpers
+private void ShowSuccess(string message)
+{
+    Console.ForegroundColor = ConsoleColor.Green;
+    Console.WriteLine($"✅ {message}");
+    Console.ResetColor();
+}
 
-    private void ShowError(string message)
-    {
-        Console.ForegroundColor = ConsoleColor.Red;
-        Console.WriteLine($"❌ {message}");
-        Console.ResetColor();
-    }
+private void ShowError(string message)
+{
+    Console.ForegroundColor = ConsoleColor.Red;
+    Console.WriteLine($"❌{message}");
+    Console.ResetColor();
+}
 
-    private void ShowInfo(string message)
-    {
-        Console.ForegroundColor = ConsoleColor.Cyan;
-        Console.WriteLine($"ℹ️ {message}");
-        Console.ResetColor();
-    }
-    #endregion
+private void ShowInfo(string message)
+{
+    Console.ForegroundColor = ConsoleColor.Cyan;
+    Console.WriteLine($"ℹ️ {message}");
+    Console.ResetColor();
+}
+
+// NEW: Yellow warning for non-critical issues (e.g., all-numeric names)
+private void ShowWarning(string message)
+{
+    Console.ForegroundColor = ConsoleColor.Yellow;
+    Console.WriteLine($"⚠️ {message}");
+    Console.ResetColor();
+}
+#endregion
 }

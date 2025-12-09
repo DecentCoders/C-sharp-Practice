@@ -69,16 +69,23 @@ public class Employee
         }
     }
 
-    public DateTime HireDate 
-    { 
-        get => _hireDate; 
-        set 
-        {
-            if (value > DateTime.Now || value < new DateTime(1900, 1, 1))
-                throw new ArgumentException("Hire date: 1900-01-01 to today.");
-            _hireDate = value;
-        }
+public DateTime HireDate 
+{ 
+    get => _hireDate; 
+    set 
+    {
+        // Rule 1: No future dates
+        if (value > DateTime.Now)
+            throw new ArgumentException("Hire date cannot be in the future.");
+        
+        // Rule 2: No dates before 2020 (company establishment year)
+        var companyEstablishmentDate = new DateTime(2020, 1, 1);
+        if (value < companyEstablishmentDate)
+            throw new ArgumentException("our company was established in 2020. Hire date cannot be before 2020.");
+        
+        _hireDate = value;
     }
+}
 
     public int VacationDaysAvailable 
     { 
