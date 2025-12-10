@@ -12,15 +12,14 @@ public class InMemoryEmployeeRepository : IEmployeeRepository
     // Constructor: Adds the default employee automatically
     public InMemoryEmployeeRepository()
     {
-        // Add Default Employee: Hridoy Hawladar
         var defaultEmployee = new Employee(
-            id: _nextId++, // ID: 1 (then _nextId becomes 2 for new employees)
-            firstName: "Hridoy",
-            lastName: "Hawladar",
-            department: Department.Engineering, // Matches "Engineering" dept
-            salary: 20000.00m, // $20,000.00 annual salary
-            hireDate: new DateTime(2020, 10, 20), // 10/20/2020
-            initialVacationDays: 15 // 15 available vacation days (0 used)
+            id: _nextId++, 
+            firstName: "Wang",
+            lastName: "Haochen",
+            department: Department.Engineering, 
+            salary: 20000.00m, 
+            hireDate: new DateTime(2020, 10, 20), 
+            initialVacationDays: 15 
         );
 
         _employees.Add(defaultEmployee);

@@ -32,27 +32,25 @@ public class PayrollService : IPayrollService
         return annualNet / 12;
     }
 
-    public string GeneratePayrollReport(Employee employee)
-    {
-        if (employee == null) throw new ArgumentNullException(nameof(employee));
+  public string GeneratePayrollReport(Employee employee)
+{
+    if (employee == null) throw new ArgumentNullException(nameof(employee));
 
-        var report = new System.Text.StringBuilder();
-        report.AppendLine("=== PAYROLL REPORT ===");
-        report.AppendLine($"Employee: {employee.GetFullName()} (ID: {employee.Id})");
-        report.AppendLine($"Department: {employee.Department} | Tenure: {employee.GetYearsOfService()} Years");
-        report.AppendLine();
-        report.AppendLine($"Annual Gross:  ${CalculateAnnualGrossPay(employee),12:N2}");
-        report.AppendLine($"Annual Taxes:  ${CalculateTaxDeduction(employee),12:N2}");
-        report.AppendLine($"Annual Net:    ${CalculateAnnualGrossPay(employee) - CalculateTaxDeduction(employee),12:N2}");
-        report.AppendLine();
-        report.AppendLine($"Monthly Gross: ${CalculateMonthlyGrossPay(employee),12:N2}");
-        report.AppendLine($"Monthly Net:   ${CalculateNetMonthlyPay(employee),12:N2}");
-        report.AppendLine($"Pay Period: {DateTime.Now:MMMM yyyy}");
-        Console.ForegroundColor = ConsoleColor.DarkGreen;
-        report.AppendLine("======================");
-        Console.ResetColor();
-        return report.ToString();
-    }
+    var report = new System.Text.StringBuilder();
+    report.AppendLine("\x1b[35m=== PAYROLL REPORT ===\x1b[0m"); // Magenta title
+    report.AppendLine($"\x1b[32mEmployee: {employee.GetFullName()} (ID: {employee.Id})\x1b[0m"); // Green name
+    report.AppendLine($"Department: {employee.Department} | Tenure: {employee.GetYearsOfService()} Years");
+    report.AppendLine();
+    report.AppendLine($"\x1b[33mAnnual Gross:  ${CalculateAnnualGrossPay(employee),12:N2}\x1b[0m"); // Yellow
+    report.AppendLine($"\x1b[31mAnnual Taxes:  ${CalculateTaxDeduction(employee),12:N2}\x1b[0m"); // Red
+    report.AppendLine($"\x1b[32mAnnual Net:    ${CalculateAnnualGrossPay(employee) - CalculateTaxDeduction(employee),12:N2}\x1b[0m"); // Green
+    report.AppendLine();
+    report.AppendLine($"\x1b[33mMonthly Gross: ${CalculateMonthlyGrossPay(employee),12:N2}\x1b[0m"); // Yellow
+    report.AppendLine($"\x1b[32mMonthly Net:   ${CalculateNetMonthlyPay(employee),12:N2}\x1b[0m"); // Green
+    report.AppendLine($"Pay Period: {DateTime.Now:MMMM yyyy}");
+    report.AppendLine("\x1b[35m=======================\x1b[0m"); // Magenta line
+    return report.ToString();
+}
 
     public IEnumerable<string> GenerateAllEmployeesPayrollReport()
     {

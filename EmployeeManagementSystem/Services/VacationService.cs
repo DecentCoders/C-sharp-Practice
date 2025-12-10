@@ -34,22 +34,24 @@ public class VacationService : IVacationService
         return employee?.UseVacationDays(daysToUse) ?? false;
     }
 
-    public string GenerateVacationReport(int employeeId)
-    {
-        var employee = _repo.GetEmployeeById(employeeId);
-        if (employee == null) return "=== VACATION REPORT ===\nEmployee not found.\n=======================";
+public string GenerateVacationReport(int employeeId)
+{
+    var employee = _repo.GetEmployeeById(employeeId);
+    if (employee == null) 
+        return "=== VACATION REPORT ===\nEmployee not found.\n=======================";
 
-        var report = new System.Text.StringBuilder();
-        report.AppendLine("=== VACATION REPORT ===");
-        report.AppendLine($"Employee: {employee.GetFullName()} (ID: {employee.Id})");
-        report.AppendLine($"Department: {employee.Department} | Tenure: {employee.GetYearsOfService()} Years");
-        report.AppendLine();
-        report.AppendLine($"Total Allocated: {employee.VacationDaysAvailable,5}");
-        report.AppendLine($"Days Used:       {employee.VacationDaysUsed,5}");
-        report.AppendLine($"Remaining:       {employee.GetRemainingVacationDays(),5}");
-        report.AppendLine("=======================");
-        return report.ToString();
-    }
+    var report = new System.Text.StringBuilder();
+    // ANSI color codes: \x1b[38;5;<color>m for text, \x1b[0m to reset
+    report.AppendLine("\x1b[36m=== VACATION REPORT ===\x1b[0m"); // Cyan title
+    report.AppendLine($"\x1b[32mEmployee: {employee.GetFullName()} (ID: {employee.Id})\x1b[0m"); // Green name
+    report.AppendLine($"Department: {employee.Department} | Tenure: {employee.GetYearsOfService()} Years");
+    report.AppendLine();
+    report.AppendLine($"\x1b[33mTotal Allocated: {employee.VacationDaysAvailable,5}\x1b[0m"); // Yellow
+    report.AppendLine($"\x1b[31mDays Used:       {employee.VacationDaysUsed,5}\x1b[0m"); // Red
+    report.AppendLine($"\x1b[32mRemaining:       {employee.GetRemainingVacationDays(),5}\x1b[0m"); // Green
+    report.AppendLine("\x1b[36m=======================\x1b[0m"); // Cyan line
+    return report.ToString();
+}
 
     public IEnumerable<string> GenerateAllEmployeesVacationReport()
     {
