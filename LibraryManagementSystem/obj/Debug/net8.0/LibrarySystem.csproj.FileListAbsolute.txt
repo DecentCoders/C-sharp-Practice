@@ -1,0 +1,15 @@
+c:\Users\X-man\Desktop\C# Practice\LibraryManagementSystem\bin\Debug\net8.0\LibrarySystem.exe
+C:\Users\X-man\Desktop\C# Practice\LibraryManagementSystem\bin\Debug\net8.0\LibrarySystem.deps.json
+C:\Users\X-man\Desktop\C# Practice\LibraryManagementSystem\bin\Debug\net8.0\LibrarySystem.runtimeconfig.json
+c:\Users\X-man\Desktop\C# Practice\LibraryManagementSystem\bin\Debug\net8.0\LibrarySystem.dll
+c:\Users\X-man\Desktop\C# Practice\LibraryManagementSystem\bin\Debug\net8.0\LibrarySystem.pdb
+c:\Users\X-man\Desktop\C# Practice\LibraryManagementSystem\obj\Debug\net8.0\LibrarySystem.GeneratedMSBuildEditorConfig.editorconfig
+c:\Users\X-man\Desktop\C# Practice\LibraryManagementSystem\obj\Debug\net8.0\LibrarySystem.AssemblyInfoInputs.cache
+c:\Users\X-man\Desktop\C# Practice\LibraryManagementSystem\obj\Debug\net8.0\LibrarySystem.AssemblyInfo.cs
+c:\Users\X-man\Desktop\C# Practice\LibraryManagementSystem\obj\Debug\net8.0\LibrarySystem.csproj.CoreCompileInputs.cache
+c:\Users\X-man\Desktop\C# Practice\LibraryManagementSystem\obj\Debug\net8.0\LibrarySystem.sourcelink.json
+c:\Users\X-man\Desktop\C# Practice\LibraryManagementSystem\obj\Debug\net8.0\LibrarySystem.dll
+c:\Users\X-man\Desktop\C# Practice\LibraryManagementSystem\obj\Debug\net8.0\refint\LibrarySystem.dll
+c:\Users\X-man\Desktop\C# Practice\LibraryManagementSystem\obj\Debug\net8.0\LibrarySystem.pdb
+C:\Users\X-man\Desktop\C# Practice\LibraryManagementSystem\obj\Debug\net8.0\LibrarySystem.genruntimeconfig.cache
+C:\Users\X-man\Desktop\C# Practice\LibraryManagementSystem\obj\Debug\net8.0\ref\LibrarySystem.dll
