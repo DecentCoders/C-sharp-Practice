@@ -53,58 +53,58 @@ public class ConsoleMenu
  private void DisplayMainMenu()
 {
     // Title (Magenta)
-    Console.ForegroundColor = ConsoleColor.Magenta;
+    Console.ForegroundColor = ConsoleColor.Green;
     Console.WriteLine("==================== EMPLOYEE MANAGEMENT SYSTEM ====================");
     Console.ResetColor();
 
-    // Menu options (Numbers = DarkYellow, Text = Cyan)
+    // Menu options (Numbers = DarkYellow, Text = Blue)
     Console.ForegroundColor = ConsoleColor.DarkYellow;
     Console.Write("1. ");
-    Console.ForegroundColor = ConsoleColor.Cyan;
+    Console.ForegroundColor = ConsoleColor.Blue;
     Console.WriteLine("Add New Employee");
     
     Console.ForegroundColor = ConsoleColor.DarkYellow;
     Console.Write("2. ");
-    Console.ForegroundColor = ConsoleColor.Cyan;
+    Console.ForegroundColor = ConsoleColor.Blue;
     Console.WriteLine("Update Employee");
     
     Console.ForegroundColor = ConsoleColor.DarkYellow;
     Console.Write("3. ");
-    Console.ForegroundColor = ConsoleColor.Cyan;
+    Console.ForegroundColor = ConsoleColor.Blue;
     Console.WriteLine("Delete Employee");
     
     Console.ForegroundColor = ConsoleColor.DarkYellow;
     Console.Write("4. ");
-    Console.ForegroundColor = ConsoleColor.Cyan;
+    Console.ForegroundColor = ConsoleColor.Blue;
     Console.WriteLine("Search Employee (ID/Name)");
     
     Console.ForegroundColor = ConsoleColor.DarkYellow;
     Console.Write("5. ");
-    Console.ForegroundColor = ConsoleColor.Cyan;
+    Console.ForegroundColor = ConsoleColor.Blue;
     Console.WriteLine("Show All Employees");
     
     Console.ForegroundColor = ConsoleColor.DarkYellow;
     Console.Write("6. ");
-    Console.ForegroundColor = ConsoleColor.Cyan;
+    Console.ForegroundColor = ConsoleColor.Blue;
     Console.WriteLine("Payroll Menu");
     
     Console.ForegroundColor = ConsoleColor.DarkYellow;
     Console.Write("7. ");
-    Console.ForegroundColor = ConsoleColor.Cyan;
+    Console.ForegroundColor = ConsoleColor.Blue;
     Console.WriteLine("Vacation Menu");
     
     Console.ForegroundColor = ConsoleColor.DarkYellow;
     Console.Write("8. ");
-    Console.ForegroundColor = ConsoleColor.Cyan;
+    Console.ForegroundColor = ConsoleColor.Red;
     Console.WriteLine("Exit");
 
     // Footer (Magenta)
-    Console.ForegroundColor = ConsoleColor.Magenta;
+    Console.ForegroundColor = ConsoleColor.Green;
     Console.WriteLine("====================================================================");
     Console.ResetColor();
 
     // Prompt (White with Blue highlight)
-    Console.ForegroundColor = ConsoleColor.Blue;
+    Console.ForegroundColor = ConsoleColor.White;
     Console.Write("Enter your choice: ");
     Console.ResetColor();
 }
@@ -113,7 +113,7 @@ public class ConsoleMenu
  private void AddEmployee()
 {
     // Colorful title (Magenta) - Fixed: Added line break for spacing
-    Console.ForegroundColor = ConsoleColor.Magenta;
+    Console.ForegroundColor = ConsoleColor.DarkGreen;
     Console.WriteLine("\n=== ADD NEW EMPLOYEE ===");
     Console.ResetColor();
 
@@ -185,14 +185,16 @@ public class ConsoleMenu
             }
 
             // Fixed: Clear error message (no duplicate ❌)
-            ShowError($"Invalid input. Enter a number between 0 and {departmentOptions.Count}");
+            ShowError($" Invalid input. Enter a number between 0 and {departmentOptions.Count}");
         }
 
         // Map number to department (fixed: index safety)
         var dept = departmentOptions[selectedDeptNumber - 1];
 
-        // Salary (LightGray prompt + fixed validation message)
-        Console.ForegroundColor = ConsoleColor.Gray;
+            // Salary (LightGray prompt + fixed validation message)
+            Console.ForegroundColor = ConsoleColor.Gray;
+       
+        
         var salary = GetValidDecimal(
             prompt: "Annual Salary (10000-1000000, no $ or 'k'): ",
             validator: d => d is >= 10000 and <= 1000000,
@@ -209,7 +211,7 @@ public class ConsoleMenu
         Console.ResetColor();
 
         // Vacation Days (LightGray prompt + fixed validation)
-        Console.ForegroundColor = ConsoleColor.Gray;
+        Console.ForegroundColor = ConsoleColor.DarkCyan;
         var vacationDays = GetValidInt(
             prompt: "Initial Vacation Days (0-365): ",
             validator: i => i is >= 0 and <= 365
@@ -247,19 +249,26 @@ public class ConsoleMenu
     }
 }    private void UpdateEmployee()
     {
+                Console.ForegroundColor = ConsoleColor.Green;
         Console.WriteLine("\n=== UPDATE EMPLOYEE ===");
+                Console.ResetColor();
+
         try
         {
             var id = GetValidInt("Enter Employee ID: ", _repo.EmployeeExists, "Employee not found.");
             var existing = _repo.GetEmployeeById(id)!;
-
+            Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine($"Current Details:\n{existing}\n");
+            Console.ResetColor();
+            Console.ForegroundColor = ConsoleColor.Yellow;
+
             Console.WriteLine("Leave field empty to keep current value.");
+            Console.ResetColor();
 
             var firstName = GetOptionalString("New First Name: ", s => s.Length is >=2 and <=50, existing.FirstName);
             var lastName = GetOptionalString("New Last Name: ", s => s.Length is >=2 and <=50, existing.LastName);
             var dept = GetOptionalDepartment(existing.Department);
-          // In the UpdateEmployee() method, replace the OLD salary line with this NEW one:
+   
 var salary = GetOptionalDecimal(
     prompt: "New Annual Salary ($10,000 - $1,000,000): ",
     validator: d => d is >= 10000 and <= 1000000,
@@ -281,7 +290,9 @@ var salary = GetOptionalDecimal(
 
     private void DeleteEmployee()
     {
+        Console.ForegroundColor = ConsoleColor.DarkGreen;
         Console.WriteLine("\n=== DELETE EMPLOYEE ===");
+        Console.ResetColor();
         try
         {
             var id = GetValidInt("Enter Employee ID: ", _repo.EmployeeExists, "Employee not found.");
@@ -306,10 +317,14 @@ var salary = GetOptionalDecimal(
 
     private void SearchEmployee()
     {
+        Console.ForegroundColor = ConsoleColor.DarkGreen;
         Console.WriteLine("\n=== SEARCH EMPLOYEE ===");
+        Console.ResetColor();
         Console.WriteLine("1. Search by ID");
         Console.WriteLine("2. Search by Name (partial match)");
+        Console.ForegroundColor = ConsoleColor.DarkBlue;
         var searchType = GetValidInt("Search type (1/2): ", t => t is 1 or 2, "Enter 1 or 2.");
+        Console.ResetColor();
 
         try
         {
@@ -346,12 +361,16 @@ var salary = GetOptionalDecimal(
 
     private void ShowAllEmployees()
     {
+        Console.ForegroundColor = ConsoleColor.DarkGreen;
         Console.WriteLine("\n=== ALL EMPLOYEES ===");
+        Console.ResetColor();
         var employees = _repo.GetAllEmployees();
 
         if (employees.Any())
         {
+            Console.ForegroundColor = ConsoleColor.DarkBlue;
             foreach (var e in employees) Console.WriteLine(e);
+        Console.ResetColor();
         }
         else
         {
@@ -363,22 +382,22 @@ var salary = GetOptionalDecimal(
     #region Payroll Operations
     private void PayrollMenu()
     {
-      Console.ForegroundColor = ConsoleColor.Magenta;
+      Console.ForegroundColor = ConsoleColor.Green;
     Console.WriteLine("\n=== PAYROLL MENU ===");
     Console.ResetColor();
 
     Console.ForegroundColor = ConsoleColor.DarkYellow;
     Console.Write("1. ");
-    Console.ForegroundColor = ConsoleColor.Cyan;
+    Console.ForegroundColor = ConsoleColor.Blue;
     Console.WriteLine("Generate Report for Single Employee");
     
     Console.ForegroundColor = ConsoleColor.DarkYellow;
     Console.Write("2. ");
-    Console.ForegroundColor = ConsoleColor.Cyan;
+    Console.ForegroundColor = ConsoleColor.Blue;
     Console.WriteLine("Generate Report for All Employees");
     Console.ResetColor();
 
-    Console.ForegroundColor = ConsoleColor.Blue;
+    Console.ForegroundColor = ConsoleColor.Gray;
     Console.Write("Choice (1/2): ");
     Console.ResetColor();
 
@@ -415,22 +434,22 @@ var salary = GetOptionalDecimal(
 
     Console.ForegroundColor = ConsoleColor.DarkYellow;
     Console.Write("1. ");
-    Console.ForegroundColor = ConsoleColor.Cyan;
+    Console.ForegroundColor = ConsoleColor.Blue;
     Console.WriteLine("Add Vacation Days");
     
     Console.ForegroundColor = ConsoleColor.DarkYellow;
     Console.Write("2. ");
-    Console.ForegroundColor = ConsoleColor.Cyan;
+    Console.ForegroundColor = ConsoleColor.Blue;
     Console.WriteLine("Use Vacation Days");
     
     Console.ForegroundColor = ConsoleColor.DarkYellow;
     Console.Write("3. ");
-    Console.ForegroundColor = ConsoleColor.Cyan;
+    Console.ForegroundColor = ConsoleColor.Blue;
     Console.WriteLine("Single Employee Report");
     
     Console.ForegroundColor = ConsoleColor.DarkYellow;
     Console.Write("4. ");
-    Console.ForegroundColor = ConsoleColor.Cyan;
+    Console.ForegroundColor = ConsoleColor.Blue;
     Console.WriteLine("All Employees Report");
     Console.ResetColor();
 
@@ -671,7 +690,7 @@ private void ShowError(string message)
 
 private void ShowInfo(string message)
 {
-    Console.ForegroundColor = ConsoleColor.Cyan;
+    Console.ForegroundColor = ConsoleColor.Blue;
     Console.WriteLine($"ℹ️ {message}");
     Console.ResetColor();
 }

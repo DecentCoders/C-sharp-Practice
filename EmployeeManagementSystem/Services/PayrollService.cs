@@ -48,7 +48,9 @@ public class PayrollService : IPayrollService
         report.AppendLine($"Monthly Gross: ${CalculateMonthlyGrossPay(employee),12:N2}");
         report.AppendLine($"Monthly Net:   ${CalculateNetMonthlyPay(employee),12:N2}");
         report.AppendLine($"Pay Period: {DateTime.Now:MMMM yyyy}");
+        Console.ForegroundColor = ConsoleColor.DarkGreen;
         report.AppendLine("======================");
+        Console.ResetColor();
         return report.ToString();
     }
 
