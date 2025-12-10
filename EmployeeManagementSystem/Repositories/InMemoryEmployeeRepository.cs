@@ -23,6 +23,16 @@ public class InMemoryEmployeeRepository : IEmployeeRepository
         );
 
         _employees.Add(defaultEmployee);
+            var defaultEmployee2 = new Employee(
+        id: _nextId++, 
+        firstName: "Hridoy",
+        lastName: "Hawladar",
+        department: Department.Finance,  // Different department from the first employee
+        salary: 25000.00m,  // Example salary
+        hireDate: new DateTime(2021, 5, 15),  // Example hire date (valid: 2021 is after 2020)
+        initialVacationDays: 20  // Example vacation days
+    );
+    _employees.Add(defaultEmployee2);
     }
 
     public int GetNextAvailableId() => _nextId++;
