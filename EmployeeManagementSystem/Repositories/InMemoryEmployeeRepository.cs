@@ -9,7 +9,6 @@ public class InMemoryEmployeeRepository : IEmployeeRepository
     private readonly List<Employee> _employees = new();
     private int _nextId = 1;
 
-    // Constructor: Adds the default employee automatically
     public InMemoryEmployeeRepository()
     {
         var defaultEmployee = new Employee(
@@ -27,10 +26,10 @@ public class InMemoryEmployeeRepository : IEmployeeRepository
         id: _nextId++, 
         firstName: "Hridoy",
         lastName: "Hawladar",
-        department: Department.Finance,  // Different department from the first employee
-        salary: 25000.00m,  // Example salary
-        hireDate: new DateTime(2021, 5, 15),  // Example hire date (valid: 2021 is after 2020)
-        initialVacationDays: 20  // Example vacation days
+        department: Department.Finance,  
+        salary: 25000.00m,  
+        hireDate: new DateTime(2021, 5, 15),  
+        initialVacationDays: 20  
     );
     _employees.Add(defaultEmployee2);
     }
@@ -64,7 +63,6 @@ public class InMemoryEmployeeRepository : IEmployeeRepository
         var existing = GetEmployeeById(employee.Id);
         if (existing == null) return false;
 
-        // Update with validation (uses Employee's property setters)
         existing.FirstName = employee.FirstName;
         existing.LastName = employee.LastName;
         existing.Department = employee.Department;

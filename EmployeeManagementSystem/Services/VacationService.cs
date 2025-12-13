@@ -7,7 +7,6 @@ public class VacationService : IVacationService
 {
     private readonly IEmployeeRepository _repo;
 
-    // Dependency Injection
     public VacationService(IEmployeeRepository repository)
     {
         _repo = repository ?? throw new ArgumentNullException(nameof(repository));
@@ -41,15 +40,14 @@ public string GenerateVacationReport(int employeeId)
         return "=== VACATION REPORT ===\nEmployee not found.\n=======================";
 
     var report = new System.Text.StringBuilder();
-    // ANSI color codes: \x1b[38;5;<color>m for text, \x1b[0m to reset
-    report.AppendLine("\x1b[36m=== VACATION REPORT ===\x1b[0m"); // Cyan title
-    report.AppendLine($"\x1b[32mEmployee: {employee.GetFullName()} (ID: {employee.Id})\x1b[0m"); // Green name
+    report.AppendLine("\x1b[36m=== VACATION REPORT ===\x1b[0m"); 
+    report.AppendLine($"\x1b[32mEmployee: {employee.GetFullName()} (ID: {employee.Id})\x1b[0m"); 
     report.AppendLine($"Department: {employee.Department} | Tenure: {employee.GetYearsOfService()} Years");
     report.AppendLine();
-    report.AppendLine($"\x1b[33mTotal Allocated: {employee.VacationDaysAvailable,5}\x1b[0m"); // Yellow
-    report.AppendLine($"\x1b[31mDays Used:       {employee.VacationDaysUsed,5}\x1b[0m"); // Red
-    report.AppendLine($"\x1b[32mRemaining:       {employee.GetRemainingVacationDays(),5}\x1b[0m"); // Green
-    report.AppendLine("\x1b[36m=======================\x1b[0m"); // Cyan line
+    report.AppendLine($"\x1b[33mTotal Allocated: {employee.VacationDaysAvailable,5}\x1b[0m"); 
+    report.AppendLine($"\x1b[31mDays Used:       {employee.VacationDaysUsed,5}\x1b[0m"); 
+    report.AppendLine($"\x1b[32mRemaining:       {employee.GetRemainingVacationDays(),5}\x1b[0m"); 
+    report.AppendLine("\x1b[36m=======================\x1b[0m"); 
     return report.ToString();
 }
 
@@ -64,6 +62,6 @@ public string GenerateVacationReport(int employeeId)
     public int GetRemainingVacationDays(int employeeId)
     {
         var employee = _repo.GetEmployeeById(employeeId);
-        return employee?.GetRemainingVacationDays() ?? -1; // -1 = not found
+        return employee?.GetRemainingVacationDays() ?? -1; 
     }
 }

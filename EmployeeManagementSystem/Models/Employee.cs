@@ -4,7 +4,6 @@ namespace EmployeeManagementSystem.Models;
 
 public class Employee
 {
-    // Private fields with non-null defaults
     private int _id;
     private string _firstName = string.Empty;
     private string _lastName = string.Empty;
@@ -14,7 +13,6 @@ public class Employee
     private int _vacationDaysAvailable;
     private int _vacationDaysUsed;
 
-    // Public properties (encapsulated validation)
     public int Id 
     { 
         get => _id; 
@@ -74,11 +72,9 @@ public DateTime HireDate
     get => _hireDate; 
     set 
     {
-        // Rule 1: No future dates
         if (value > DateTime.Now)
             throw new ArgumentException("Hire date cannot be in the future.");
         
-        // Rule 2: No dates before 2020 (company establishment year)
         var companyEstablishmentDate = new DateTime(2020, 1, 1);
         if (value < companyEstablishmentDate)
             throw new ArgumentException("our company was established in 2020. Hire date cannot be before 2020.");
@@ -109,7 +105,6 @@ public DateTime HireDate
         }
     }
 
-    // Constructor (validates all inputs)
     public Employee(int id, string firstName, string lastName, Department department, 
                    decimal salary, DateTime hireDate, int initialVacationDays)
     {
@@ -123,12 +118,10 @@ public DateTime HireDate
         VacationDaysUsed = 0;
     }
 
-    // Business logic
     public int GetRemainingVacationDays() => VacationDaysAvailable - VacationDaysUsed;
     public string GetFullName() => $"{FirstName} {LastName}";
     public int GetYearsOfService() => DateTime.Now.Year - HireDate.Year;
 
-    // Internal methods (only accessible to services)
     internal void AddVacationDays(int days) => VacationDaysAvailable += days;
     internal bool UseVacationDays(int days)
     {
@@ -136,8 +129,6 @@ public DateTime HireDate
         VacationDaysUsed += days;
         return true;
     }
-
-    // Clean string representation
     public override string ToString()
     {
         return $"ID: {Id,-5} Name: {GetFullName(),-20} Dept: {Department,-12} " +
