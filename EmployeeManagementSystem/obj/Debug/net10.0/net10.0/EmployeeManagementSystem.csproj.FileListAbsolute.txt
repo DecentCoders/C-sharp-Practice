@@ -1,5 +1,0 @@
-C:\Users\X-man\Desktop\C# Practice\EmployeeManagementSystem\obj\Debug\net10.0\net10.0\EmployeeManagementSystem.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\X-man\Desktop\C# Practice\EmployeeManagementSystem\obj\Debug\net10.0\net10.0\EmployeeManagementSystem.AssemblyInfoInputs.cache
-C:\Users\X-man\Desktop\C# Practice\EmployeeManagementSystem\obj\Debug\net10.0\net10.0\EmployeeManagementSystem.AssemblyInfo.cs
-C:\Users\X-man\Desktop\C# Practice\EmployeeManagementSystem\obj\Debug\net10.0\net10.0\EmployeeManagementSystem.csproj.CoreCompileInputs.cache
-C:\Users\X-man\Desktop\C# Practice\EmployeeManagementSystem\obj\Debug\net10.0\net10.0\EmployeeManagementSystem.sourcelink.json

@@ -20,7 +20,7 @@ public class ConsoleMenu
 
     public void Run()
     {
-        Console.Title = "WANG & HRIDOY TECH - EMPLOYEE MANAGEMENT ";
+        Console.Title = "WANG & HRIDOY's TECH - EMPLOYEE MANAGEMENT ";
         bool isRunning = true;
 
         while (isRunning)
@@ -56,7 +56,7 @@ public class ConsoleMenu
  private void DisplayMainMenu()
 {
     Console.ForegroundColor = ConsoleColor.Green;
-    Console.WriteLine("==================== WANG & HRIDOY TECH - EMPLOYEE MANAGEMENT  ====================");
+    Console.WriteLine("==================== WANG & HRIDOY's TECH - EMPLOYEE MANAGEMENT  ====================");
     Console.ResetColor();
 
     Console.ForegroundColor = ConsoleColor.DarkYellow;
